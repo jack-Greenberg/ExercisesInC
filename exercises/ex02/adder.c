@@ -22,12 +22,16 @@ void vet_input(char buffer[32], int* flag)
 {
     int j = 0;
     while (buffer[j] != '\0') {
-        if (isalpha(buffer[j])) {
+        if (!isdigit(buffer[j]) && (buffer[j] != '\n')) {
             *flag = 1;
             puts("Input not recognized; use a valid number");
+            j++;
             break;
-        }
-        j++;
+        } else if (buffer[j] == '\n') {
+            break;
+        } else {
+	    j++;
+	}
     }
 }
 
