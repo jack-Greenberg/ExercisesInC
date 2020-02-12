@@ -34,7 +34,6 @@ void find_track(char search_for[])
 }
 
 // Finds all tracks that match the given pattern.
-//
 // Prints track number and title.
 void find_track_regex(char pattern[])
 {
@@ -45,8 +44,6 @@ void find_track_regex(char pattern[])
         printf("Compilation error\n");
         exit(rc);
     }
-
-    regmatch_t matches[NUM_TRACKS];
 
     for (int i = 0; i < NUM_TRACKS; i++) {
         int no_match = regexec(&r, tracks[i], (size_t) 0, NULL, 0);
