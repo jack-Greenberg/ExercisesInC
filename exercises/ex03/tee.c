@@ -5,7 +5,7 @@ Usage:
 
 Description:
     Copy standard input to each FILE, and also to standard output.
-        -a
+        -a, --append
             append to the given FILEs, do not overwrite
 
 Author:
@@ -19,6 +19,7 @@ Huge thank you to Manu Patil for his help debugging :)
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <getopt.h>
 
 char *FILE_MODE = "w";
 
@@ -30,7 +31,14 @@ int main(int argc, char *argv[])
     FILE **fd; // Will hold a list of file descriptors to write to
     int fd_count; // Will hold the number of things to write to (NUM_FILES + 1 (the +1 is for stdout))
 
-    while ((ch = getopt(argc, argv, "a")) != EOF) {
+	// Create long_options for long versions of the commandline flags
+    static struct option const long_options[] =
+    {
+        {"append", no_argument, NULL, 'a'},
+        {NULL, 0, NULL, 0}
+    };
+
+    while ((ch = getopt_long(argc, argv, "a", long_options, NULL)) != EOF) {
         switch(ch) {
             case 'a':
                 FILE_MODE = "a";
