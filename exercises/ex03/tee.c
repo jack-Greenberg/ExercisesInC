@@ -71,3 +71,16 @@ int main(int argc, char *argv[])
         fclose(fd[k]);
     }
 }
+
+/* SoftSys questions
+
+3. It was very helpful to work along with the Mike Parker, Richard M. Stallman, and David MacKenzie solution from git.savannah.gnu.org because it provided some helpful hints and design choices that I took inspiration from, especially the concept of creating a list of file descriptors.
+
+I was slowed down because I didn't keep good track of my variables. At one point, I had lots of for-loop indexes (i,j,k), as well as NUM_FILES, fd_count, and argc, and used a lot of them interchangably by adding or subtracting 1 to each of them depending on what was needed. After I figured out what I was doing wrong, I rewrote a lot of the functionality and created a list of variables that each had a specific meaning. From this I learned that it is a good idea to have variables with descriptive names that serve a single purpose.
+
+At one point, I found it very helpful to step away from my computer and write down the basic structure of the program on a piece of paper and tackle each one separately and stitch it all together. 
+
+
+4. In the professional code, there is a lot more error checking. There are descriptive messages for each possible error (reading stdin, opening files, writing files, etc.). There are also pieces of code that deal with interrupts (the -i argument). There is also code dealing with pipe issues, structs, and arrows (?) (->).
+
+*/
