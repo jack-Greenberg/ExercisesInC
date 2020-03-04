@@ -59,9 +59,11 @@ x, y: coordinates
 returns: new Rectangle; use free_rectangle to free
 */
 Rectangle *make_rectangle(Point *corner, double width, double height) {
-    // FILL THIS IN
-    // What are the pros and cons of making a copy of corner?
-    return NULL;
+	Rectangle *new_rect = malloc(sizeof(Rectangle));
+	new_rect->corner = corner;
+	new_rect->width = width;
+	new_rect->height = height;
+    return new_rect;
 }
 
 /* Return string representation
