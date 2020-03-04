@@ -78,7 +78,37 @@ float my_random_float2()
 // compute a random double using my algorithm
 double my_random_double()
 {
-    // TODO: fill this in
+	long x;
+	long exp = 1023;
+	long mant;
+	
+	union {
+		double d;
+		long l;
+	} b;
+
+    // generate 63 random bits (assuming that RAND_MAX is 2^31 - 1
+
+	while (1) {
+    	x = (random() << 32) | random(); // Need more CHAOS
+		if (x == 0) {
+			exp -= 63;
+		} else {
+			break;	
+		}	
+	}
+
+	int mask = 1;
+
+	while (x & mask) {
+		mask <<= 1;
+		exp--;
+	}
+
+	mant = x >> 11;	
+    b.l = (exp << 52) | mant;
+
+    return b.d;
 }
 
 // return a constant (this is a dummy function for time trials)
