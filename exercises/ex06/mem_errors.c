@@ -33,12 +33,12 @@ int main()
     read_element(array1, 100);
 
     // but it does bounds-check dynamic arrays
-    read_element(array2, -1);
-    read_element(array2, 100);
+    read_element(array2, -1); // This is invalid because -1 is out of range, so valgrind complains
+    read_element(array2, 100); // This doesn't make sense because 99 is outside the bounds of the dynamically allocated list (0, 99)
 
     // and it catches use after free
-    free(use_after_free);
-    *use_after_free = 17;
+    free(use_after_free); 
+    *use_after_free = 17; // This is bad because we are trying to write to a freed variable
 
     // never_free is definitely lost
     *never_free = 17;
@@ -47,10 +47,10 @@ int main()
     // free(&never_allocated);
 
     // but this one doesn't
-    free_anything(&never_allocated);
+    free_anything(&never_allocated); // never_allocated was, well, never allocated, so we are freeing something that was never allocated. never_allocated is on the stack, not the heap
 
     free(free_twice);
-    free(free_twice);
+    free(free_twice); // You are trying to free the same variable twice...
 
     return 0;
 }
