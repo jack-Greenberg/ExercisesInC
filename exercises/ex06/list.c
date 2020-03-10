@@ -25,7 +25,7 @@ typedef struct node {
 */
 Node *make_node(int val, Node *next) {
     Node *node = malloc(sizeof(Node));
-    node->val = val;
+	node->val = val;
     node->next = next;
     return node;
 }
@@ -54,8 +54,12 @@ void print_list(Node **list) {
 * returns: int or -1 if the list is empty
 */
 int pop(Node **list) {
-    // FILL THIS IN!
-    return 0;
+	Node * head = *list;
+	if (head == NULL) {
+		return -1;
+	}
+	*list = head->next;
+	return head->val;
 }
 
 
@@ -65,7 +69,9 @@ int pop(Node **list) {
 * val: value to add
 */
 void push(Node **list, int val) {
-    // FILL THIS IN!
+	Node *head = *list;
+	Node *new_node = make_node(val, head);
+	*list = new_node;
 }
 
 
@@ -79,8 +85,26 @@ void push(Node **list, int val) {
 * returns: number of nodes removed
 */
 int remove_by_value(Node **list, int val) {
-    // FILL THIS IN!
-    return 0;
+	Node *current = *list;
+	while (current->next != NULL && current->next->val != val) {
+		current = current->next;
+	}
+	// Now current will either be last node or the node before the node with the val we want to free
+	
+	if (current->next == NULL) {
+		return 0;
+	}
+
+	if (current->next->next == NULL) {
+		free(current->next);
+		current->next == NULL;
+		return 1;
+	} else {
+		Node *new_next = current->next->next;
+		free(current->next);
+		current->next = new_next;
+		return 1;
+	}
 }
 
 
@@ -91,7 +115,16 @@ int remove_by_value(Node **list, int val) {
 * list: pointer to pointer to Node
 */
 void reverse(Node **list) {
-    // FILL THIS IN!
+	Node *current = *list;
+	Node *next_node = NULL;
+	Node *prev_node = NULL;
+	while (current != NULL) {
+		next_node = current->next;
+		current->next = prev_node;
+		prev_node = current;
+		current = next_node;
+	}
+	*list = prev_node;
 }
 
 
@@ -110,10 +143,8 @@ int main() {
     push(list, retval+10);
     print_list(list);
 
-    remove_by_value(list, 3);
     print_list(list);
 
-    remove_by_value(list, 7);
     print_list(list);
 
     reverse(list);
