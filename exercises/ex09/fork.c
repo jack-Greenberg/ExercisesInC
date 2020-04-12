@@ -19,7 +19,9 @@ License: MIT License https://opensource.org/licenses/MIT
 // error information
 extern int errno;
 
+int global_variable = 20;
 
+char static_variable[] = "I'm static!";
 // get_seconds returns the number of seconds since the
 // beginning of the day, with microsecond precision
 double get_seconds() {
@@ -57,6 +59,11 @@ int main(int argc, char *argv[])
     // get the start time
     start = get_seconds();
 
+    int *heap_variable = malloc(sizeof(int));
+    *heap_variable = 1;
+
+    int stack_variable = 10;
+
     for (i=0; i<num_children; i++) {
 
         // create a child process
@@ -72,12 +79,28 @@ int main(int argc, char *argv[])
 
         /* see if we're the parent or the child */
         if (pid == 0) {
+            *heap_variable = *heap_variable + 1;
+            stack_variable++;
+            global_variable++;
+            printf("CHILD: Heap variable after increment: %d\n", *heap_variable);
+            printf("CHILD: Stack variable after increment: %d\n", stack_variable);
+            printf("CHILD: Global variable after increment: %d\n", global_variable);
+            printf("CHILD: Address of main(): %p\n", &main);
+            printf("CHILD: Address of static variable: %p\n", &static_variable);
             child_code(i);
             exit(i);
         }
     }
 
     /* parent continues */
+    *heap_variable = *heap_variable + 1;
+    stack_variable++;
+    global_variable++;
+    printf("PARENT: Heap variable after increment: %d\n", *heap_variable);
+    printf("PARENT: Stack variable after increment: %d\n", stack_variable);
+    printf("PARENT: Global variable after increment: %d\n", global_variable);
+    printf("PARENT: Address of main(): %p\n", &main);
+    printf("PARENT: Address of static variable: %p\n", &static_variable);
     printf("Hello from the parent.\n");
 
     for (i=0; i<num_children; i++) {
@@ -99,3 +122,13 @@ int main(int argc, char *argv[])
 
     exit(0);
 }
+
+
+/*
+ * The child processes don't share the same stack, global, or heap variables. I tried incrementing each variable and then printing it,
+ * but each time the value was the same. Processes utilize "copy-on-write", which lets them use the same memory until the memory is
+ * written to, and then the kernel copies the memory into a different space so that the processes have their own dedicated chunk
+ * of memory
+ *
+ * The processes do share code and static segments, though. When we run the code, we can see that they use the same memory addresses.
+ */
