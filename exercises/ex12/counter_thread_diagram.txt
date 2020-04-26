@@ -1,0 +1,36 @@
+./counter
+|
+|
+* make_thread         *
+* make_thread       * |
+* make_thread     * | |
+* make_thread   * | | * counter is 0
+* make_thread * | | * | counter is 0
+|             | | * | | counter is 0
+|             | | | | * incr
+|             | | | * | incr
+|             | * | | | counter is 2
+|             * | | | | counter is 2
+|             | | * | | incr
+|             | * | | | incr
+|             * | | | | incr
+|            / / / / /
+|           * * * * *
+* join_thread
+* join_thread
+* join_thread
+* join_thread
+* join_thread
+|
+* Final value of counter is 5
+
+
+The final value of the counter is correct
+
+If I increase the number of children to 50, there are still synchronization issues. Even at the beginning, somehow I got the output:
+    counter = 0
+    counter = 1
+    counter = 0
+    counter = 0
+    counter = 4
+which is not correct. But they do seem to be running concurrently, just not synchronously.
